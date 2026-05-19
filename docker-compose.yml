@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: studentdb
+    ports: ["3306:3306"]
+    volumes: ["mysql_data:/var/lib/mysql"]
+    networks: [smsnet]
+    healthcheck:
+      test: ["CMD","mysqladmin","ping","-h","localhost","-uroot","-proot"]
+      interval: 10s
+      retries: 5
+  app:
+    image: mangeshc225/student-management:latest
+    depends_on:
+      mysql: { condition: service_healthy }
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: studentdb
+      DB_USER: root
+      DB_PASSWORD: root
+    ports: ["8080:8080"]
+    networks: [smsnet]
+volumes:
+  mysql_data:
+networks:
+  smsnet:
+
+# This file is used to run mutiple services together. It defines the MySQL database and the Spring Boot application, ensuring they can communicate with each other. The MySQL service is configured with a health check to ensure it is ready before the application starts. The application service depends on the MySQL service and will only start once the database is healthy.
