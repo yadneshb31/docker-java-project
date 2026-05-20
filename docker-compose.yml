@@ -5,7 +5,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: studentdb
-    ports: ["3307:3306"]
+    #ports: ["3307:3306"]
     volumes: ["mysql_data:/var/lib/mysql"]
     networks: [smsnet]
     healthcheck:
